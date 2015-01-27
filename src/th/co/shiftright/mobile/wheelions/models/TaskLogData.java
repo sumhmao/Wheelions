@@ -105,7 +105,7 @@ public class TaskLogData implements Parcelable {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
 						JSONArray array = object.getJSONArray(key);
 						for (int i = 0; i < array.length(); i++) {
-							ImageItem logPhoto = new ImageItem(object.getJSONObject(key));
+							ImageItem logPhoto = new ImageItem(array.getJSONObject(i));
 							logPhoto.setImageCategory(ImageCategory.TaskLog);
 							allPhotos.add(logPhoto);
 						}

@@ -40,7 +40,7 @@ public class TaskLogAdapter extends ArrayAdapter<TaskLogData> {
 		final TaskLogData data = values.get(position);
 		if (data != null) {
 			itemView.setData(data, position);
-			Bitmap photo = imageManager.getImage(data.getLogPhoto(), imageSize);
+			Bitmap photo = imageManager.getImage(data.getFirstPhoto(), imageSize);
 			if (photo != null) {
 				itemView.setThumbImage(photo);
 			}

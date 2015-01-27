@@ -1,8 +1,10 @@
 package th.co.shiftright.mobile.wheelions.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -20,7 +22,7 @@ public class TaskLogData implements Parcelable {
 	private LatLng location;
 	private boolean isHasTime = false;
 	private Date time;
-	private ImageItem logPhoto;
+	private ArrayList<ImageItem> allPhotos;
 
 	public String getId() {
 		return id;
@@ -46,12 +48,24 @@ public class TaskLogData implements Parcelable {
 	public String getTimeString() {
 		return WheelionsApplication.formatShortDateString(time);
 	}
-	public ImageItem getLogPhoto() {
-		return logPhoto;
+	public ArrayList<ImageItem> getAllPhotos() {
+		return allPhotos;
+	}
+	public ImageItem getFirstPhoto() {
+		if (allPhotos.size() > 0) {
+			return allPhotos.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	private void init() {
+		allPhotos = new ArrayList<ImageItem>();
 	}
 
 	@SuppressWarnings("unchecked")
 	public TaskLogData(JSONObject object) {
+		init();
 		double latitude = 0;
 		double longitude = 0;
 		Iterator<String> dataIter = object.keys();
@@ -87,12 +101,13 @@ public class TaskLogData implements Parcelable {
 							isHasTime = true;
 						}
 					}
-				} else if (key.equalsIgnoreCase("image")) {
+				} else if (key.equalsIgnoreCase("images")) {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
-						logPhoto = new ImageItem(object.getJSONObject(key));
-						logPhoto.setImageCategory(ImageCategory.TaskLog);
-						if (!WheelionsApplication.ifStringNotNullOrEmpty(logPhoto.getId())) {
-							logPhoto.setId(getId());
+						JSONArray array = object.getJSONArray(key);
+						for (int i = 0; i < array.length(); i++) {
+							ImageItem logPhoto = new ImageItem(object.getJSONObject(key));
+							logPhoto.setImageCategory(ImageCategory.TaskLog);
+							allPhotos.add(logPhoto);
 						}
 					}
 				}
@@ -112,7 +127,7 @@ public class TaskLogData implements Parcelable {
 		dest.writeString(id);
 		dest.writeString(name);
 		dest.writeParcelable(location, flags);
-		dest.writeParcelable(logPhoto, flags);
+		dest.writeTypedList(allPhotos);
 		dest.writeValue(Boolean.valueOf(isHasTime));
 		if (isHasTime) {
 			dest.writeLong(getTime().getTime());
@@ -120,10 +135,11 @@ public class TaskLogData implements Parcelable {
 	}
 
 	public TaskLogData(Parcel in) {
+		init();
 		this.id = in.readString();
 		this.name = in.readString();
 		this.location = in.readParcelable(LatLng.class.getClassLoader());
-		this.logPhoto = in.readParcelable(ImageItem.class.getClassLoader());
+		in.readTypedList(allPhotos, ImageItem.CREATOR);
 		this.isHasTime = ((Boolean) in.readValue(Boolean.class.getClassLoader())).booleanValue();
 		if (isHasTime) {
 			this.time = new Date(in.readLong());

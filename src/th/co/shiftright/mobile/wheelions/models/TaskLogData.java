@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import com.google.android.gms.maps.model.LatLng;
 
 import th.co.shiftright.mobile.wheelions.WheelionsApplication;
+import th.co.shiftright.mobile.wheelions.imagemanager.ImageCategory;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -19,6 +20,7 @@ public class TaskLogData implements Parcelable {
 	private LatLng location;
 	private boolean isHasTime = false;
 	private Date time;
+	private ImageItem logPhoto;
 
 	public String getId() {
 		return id;
@@ -43,6 +45,9 @@ public class TaskLogData implements Parcelable {
 	}
 	public String getTimeString() {
 		return WheelionsApplication.formatShortDateString(time);
+	}
+	public ImageItem getLogPhoto() {
+		return logPhoto;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -82,6 +87,14 @@ public class TaskLogData implements Parcelable {
 							isHasTime = true;
 						}
 					}
+				} else if (key.equalsIgnoreCase("image")) {
+					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
+						logPhoto = new ImageItem(object.getJSONObject(key));
+						logPhoto.setImageCategory(ImageCategory.TaskLog);
+						if (!WheelionsApplication.ifStringNotNullOrEmpty(logPhoto.getId())) {
+							logPhoto.setId(getId());
+						}
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -99,6 +112,7 @@ public class TaskLogData implements Parcelable {
 		dest.writeString(id);
 		dest.writeString(name);
 		dest.writeParcelable(location, flags);
+		dest.writeParcelable(logPhoto, flags);
 		dest.writeValue(Boolean.valueOf(isHasTime));
 		if (isHasTime) {
 			dest.writeLong(getTime().getTime());
@@ -109,6 +123,7 @@ public class TaskLogData implements Parcelable {
 		this.id = in.readString();
 		this.name = in.readString();
 		this.location = in.readParcelable(LatLng.class.getClassLoader());
+		this.logPhoto = in.readParcelable(ImageItem.class.getClassLoader());
 		this.isHasTime = ((Boolean) in.readValue(Boolean.class.getClassLoader())).booleanValue();
 		if (isHasTime) {
 			this.time = new Date(in.readLong());

@@ -65,7 +65,7 @@ public class ImageItem implements Parcelable, IImageItem {
 							this.setId(String.format("%d", object.getInt(key)));
 						}
 					}
-				} else if (key.equalsIgnoreCase("thumbs")) {
+				} else if (key.equalsIgnoreCase("thumb")) {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
 						this.setThumb(object.getString(key));
 					}
@@ -73,7 +73,7 @@ public class ImageItem implements Parcelable, IImageItem {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
 						this.setPreview(object.getString(key));
 					}
-				} else if (key.equalsIgnoreCase("url")) {
+				} else if (key.equalsIgnoreCase("original")) {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
 						this.setOriginal(object.getString(key));
 					}
@@ -88,9 +88,9 @@ public class ImageItem implements Parcelable, IImageItem {
 		try {
 			JSONObject json = new JSONObject();
 			json.put("id", getId());
-			json.put("thumbs", getThumb());
+			json.put("thumb", getThumb());
 			json.put("preview", getPreview());
-			json.put("url", getOriginal());
+			json.put("original", getOriginal());
 			return json;
 		} catch (Exception e) {
 			return null;

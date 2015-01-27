@@ -1,0 +1,164 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingBottom="30dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    tools:context="th.co.shiftright.mobile.wheelions.TaskDetailActivity"
+    tools:ignore="ContentDescription,UselessParent,ButtonStyle" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="20dp" >
+
+        <TextView
+            android:id="@+id/lblTaskDescription"
+            style="@style/text_single_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/normal_text_font_size" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/text_single_line"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/task_no"
+                android:textColor="@color/black"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/normal_text_font_size" />
+
+            <TextView
+                android:id="@+id/lblTaskNo"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"
+                android:textColor="@color/black"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/normal_text_font_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/text_single_line"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/from"
+                android:textColor="@color/black"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/normal_text_font_size" />
+
+            <TextView
+                android:id="@+id/lblFrom"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"
+                android:textColor="@color/black"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/normal_text_font_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/text_single_line"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/to"
+                android:textColor="@color/black"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/normal_text_font_size" />
+
+            <TextView
+                android:id="@+id/lblTo"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"
+                android:textColor="@color/black"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/normal_text_font_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnReportStatus"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/item_white_rectangle_ani_bg"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="@string/report_status"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal_text_font_size" />
+
+            <Button
+                android:id="@+id/btnAddPhoto"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/item_white_rectangle_ani_bg"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="@string/add_photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal_text_font_size" />
+        </LinearLayout>
+
+        <th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshListView
+            android:id="@+id/lsvTaskLog"
+            style="@style/default_listview"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:fadingEdge="none"
+            android:overScrollMode="never" />
+    </LinearLayout>
+
+</RelativeLayout>

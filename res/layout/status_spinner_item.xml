@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="SpUsage" >
+
+    <TextView
+        android:id="@+id/lblStatusName"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@null"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="27dp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/normal_text_font_size" />
+
+    <TextView
+        android:id="@+id/lblStatusNameSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#ffffff"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/big_text_font_size" />
+
+</RelativeLayout>

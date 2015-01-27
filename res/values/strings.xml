@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wheelions</string>
+    <string name="googlemaps_api_key">AIzaSyBUx94u7A8Kcwfhz_WAGJt9CBNDCZKz9lc</string>
+
+    <!-- Main Activity -->
+    <string name="login_instruction">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</string>
+    <string name="driving_no">เลขที่ใบอนุญาตขับขี่</string>
+    <string name="password">รหัสผ่าน</string>
+    <string name="login">เข้าสู่ระบบ</string>
+
+    <!-- Task List Activity -->
+    <string name="report_location">+ รายงานตำแหน่ง</string>
+    <string name="bullet">></string>
+
+    <!-- Task Detail Activity -->
+    <string name="task_no">เลขที่ใบส่งของ :</string>
+    <string name="from">ต้นทาง :</string>
+    <string name="to">ปลายทาง :</string>
+    <string name="report_status">รายงานสถานะ</string>
+    <string name="add_photo">เพิ่มรูป</string>
+    <string name="report_status_dialog">รายงานสถานะ</string>
+    <string name="report_status_dialog_cancel">ยกเลิก</string>
+    <string name="report_status_dialog_submit">บันทึก</string>
+
+</resources>

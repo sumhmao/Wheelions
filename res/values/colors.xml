@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black_trans">#e0000000</color>
+    <color name="white_trans">#f9f9f9</color>
+    <color name="separator_line_gray">#DDDDDD</color>
+    <color name="separator_line_blue">#1AB7EA</color>
+    <color name="separator_line_red">#DDFF0000</color>
+    <color name="separator_line_purple">#F50485</color>
+    <color name="separator_line_black">#000000</color>
+    <color name="black">#000000</color>
+    <color name="light_gray">#E4E5E6</color>
+    <color name="white">#ffffff</color>
+    <color name="white_pressed">#e5e5e5</color>
+    <color name="gray">#949ba1</color>
+    <color name="gray_pressed">#7f878e</color>
+    <color name="blue">#1ab7ea</color>
+    <color name="blue_pressed">#2ac7fa</color>
+    <color name="purple">#C91D89</color>
+    <color name="purple_pressed">#b61a7c</color>
+    <color name="dark_gray">#44555f</color>
+    <color name="dark_gray_pressed">#2e3a41</color>
+    <color name="yellow">#feec30</color>
+    <color name="yellow_pressed">#f8e301</color>
+    <color name="green">#d5e04e</color>
+    <color name="green_pressed">#c5d03e</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="yellow_light">#fef6a9</color>
+    <color name="dark_gray_light">#8ea2ae</color>
+    <color name="orange">#f47b20</color>
+    <color name="red">#e51c22</color>
+
+</resources>

@@ -31,10 +31,10 @@ public class PlacePin implements ClusterItem {
 	}
 
 	public int getMarkerResId() {
-		return R.drawable.ic_launcher;
+		return R.drawable.pin;
 	}
 
 	public int getSelectedMarkerResId() {
-		return R.drawable.ic_launcher;
+		return R.drawable.pin;
 	}
 }

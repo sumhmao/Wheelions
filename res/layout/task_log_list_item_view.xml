@@ -27,7 +27,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:adjustViewBounds="true"
-        android:background="@drawable/item_white_rectangle_bg"
+        android:background="@null"
         android:scaleType="fitCenter"
         android:visibility="gone" />
 

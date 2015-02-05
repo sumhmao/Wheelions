@@ -40,6 +40,7 @@
     <application
         android:name="th.co.shiftright.mobile.wheelions.WheelionsApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -73,6 +74,11 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="th.co.shiftright.mobile.wheelions.TaskDetailActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="th.co.shiftright.mobile.wheelions.TaskLogDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />

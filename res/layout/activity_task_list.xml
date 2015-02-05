@@ -51,7 +51,8 @@
             android:paddingTop="5dp"
             android:text="@string/report_location"
             android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_font_size" />
+            android:textSize="@dimen/normal_text_font_size"
+            android:visibility="gone" />
 
         <th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshListView
             android:id="@+id/lsvTaskList"

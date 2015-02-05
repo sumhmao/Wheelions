@@ -10,7 +10,10 @@ import org.json.JSONObject;
 import com.google.android.gms.maps.model.LatLng;
 
 import th.co.shiftright.mobile.wheelions.WheelionsApplication;
+import th.co.shiftright.mobile.wheelions.imagemanager.AdapterImageManager;
 import th.co.shiftright.mobile.wheelions.imagemanager.ImageCategory;
+import th.co.shiftright.mobile.wheelions.imagemanager.ImageDownloadEventListener;
+import th.co.shiftright.mobile.wheelions.imagemanager.ImageSize;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -47,6 +50,9 @@ public class TaskLogData implements Parcelable {
 	}
 	public String getTimeString() {
 		return WheelionsApplication.formatShortDateString(time);
+	}
+	public String getFullTimeString() {
+		return WheelionsApplication.formatLongDateString(time);
 	}
 	public ArrayList<ImageItem> getAllPhotos() {
 		return allPhotos;
@@ -116,6 +122,14 @@ public class TaskLogData implements Parcelable {
 			}
 		}
 		location = new LatLng(latitude, longitude);
+	}
+
+	public AsyncTaskQueueItem getImageTask(final ImageDownloadEventListener listener, final int photoSize) {
+		if (getFirstPhoto() != null) {
+			return AdapterImageManager.getImageDownloadTask(listener, ImageSize.Original, photoSize, getFirstPhoto(), null);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

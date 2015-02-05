@@ -24,4 +24,15 @@
     <string name="report_status_dialog_cancel">ยกเลิก</string>
     <string name="report_status_dialog_submit">บันทึก</string>
 
+    <!-- Task Log Detail Activity -->
+    <string name="log_note_format">บักทึก: %s</string>
+    <string name="log_time_format">เวลา: %s</string>
+
+    <!-- Take Photo Button -->
+    <string name="edit_text_view_submit">OK</string>
+    <string name="edit_text_view_cancel">CANCEL</string>
+    <string name="edit_image_view_header">CHOOSE PHOTO SOURCE</string>
+    <string name="edit_image_view_choose_photo">CHOOSE FROM LIBRARY</string>
+    <string name="edit_image_view_take_photo">TAKE A PHOTO</string>
+
 </resources>

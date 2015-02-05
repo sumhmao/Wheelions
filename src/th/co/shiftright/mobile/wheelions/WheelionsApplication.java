@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -33,6 +34,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Bitmap.Config;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -51,6 +53,8 @@ public class WheelionsApplication extends Application {
 	public static final int CONNECTION_TIMEOUT = 45000;
 	public static final int SOCKET_TIMEOUT = 45000;
 	public static final int IMAGE_CACHE_PERCENTAGE = 20;
+
+	public static final int IMAGE_MAX_SIZE = 800;
 
 	@Override
 	public void onCreate() {
@@ -262,6 +266,30 @@ public class WheelionsApplication extends Application {
 		}
 	}
 
+	public static Bitmap decodeSampledBitmapFromPath(String pathName,
+			int maxSize) {
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inPreferredConfig = Bitmap.Config.RGB_565;
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(pathName, options);
+		options.inSampleSize = calculateInSampleSize(options, maxSize);
+		options.inPreferredConfig = Bitmap.Config.RGB_565;
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeFile(pathName, options);
+	}
+
+	public static Bitmap getBitmapFromUri(Activity activity, Uri imageUri) {
+		try {
+			ContentResolver cr = activity.getContentResolver();
+			cr.notifyChange(imageUri, null);
+			Bitmap currentImage = android.provider.MediaStore.Images.Media.getBitmap(cr, imageUri);
+			return currentImage;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public static Bitmap maskImage(Bitmap original, Bitmap mask) {
 		int size = Math.min(original.getWidth(), original.getHeight());
 		mask = Bitmap.createScaledBitmap(mask, size, size, true);
@@ -333,6 +361,14 @@ public class WheelionsApplication extends Application {
 		Locale locale = Locale.US;
 		String timeString = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("d/M HH:mm", Locale.getDefault());
+		timeString = String.format(locale, "%s", dateFormat.format(eventDate));
+		return timeString;
+	}
+
+	public static String formatLongDateString(Date eventDate) {
+		Locale locale = Locale.US;
+		String timeString = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd' 'MMM' 'yyyy HH:mm", Locale.getDefault());
 		timeString = String.format(locale, "%s", dateFormat.format(eventDate));
 		return timeString;
 	}

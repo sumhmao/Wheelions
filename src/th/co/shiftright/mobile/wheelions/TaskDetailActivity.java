@@ -14,6 +14,9 @@ import th.co.shiftright.mobile.wheelions.api.APIRequestResult;
 import th.co.shiftright.mobile.wheelions.custom_controls.CustomProgressDialog;
 import th.co.shiftright.mobile.wheelions.custom_controls.ReportStatusDialog;
 import th.co.shiftright.mobile.wheelions.custom_controls.ReportStatusDialogListener;
+import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton;
+import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButtonListener;
+import th.co.shiftright.mobile.wheelions.models.ConfirmationDialogListener;
 import th.co.shiftright.mobile.wheelions.models.TaskData;
 import th.co.shiftright.mobile.wheelions.models.TaskLogData;
 import th.co.shiftright.mobile.wheelions.models.TaskStatus;
@@ -22,9 +25,13 @@ import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshBase;
 import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshListView;
 import android.app.Activity;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,7 +46,7 @@ public class TaskDetailActivity extends LocationBasedActivity {
 	private TextView lblFrom;
 	private TextView lblTo;
 	private Button btnReportStatus;
-	private Button btnAddPhoto;
+	private TakePhotoButton btnAddPhoto;
 	private ArrayList<TaskLogData> allLogs;
 	private TaskLogAdapter adapter;
 	private PullToRefreshListView lsvTaskLog;
@@ -78,24 +85,51 @@ public class TaskDetailActivity extends LocationBasedActivity {
 				ReportStatusDialog dialog = new ReportStatusDialog(TaskDetailActivity.this);
 				dialog.setReportStatusDialogListener(new ReportStatusDialogListener() {
 					@Override
-					public void onStatusReported(TaskStatus status) {
+					public void onStatusReported(final TaskStatus status) {
 						if (status != null) {
-							statusRequest.reportTaskLog(WheelionsApplication.getCurrentUserID(TaskDetailActivity.this),
-									currentTask.getId(), getCurrentLocation(), status.getTitle(), status.getCode());
+							showConfirmationDialog("Upload this status ?", "Yes", "Cancel", new ConfirmationDialogListener() {
+								@Override
+								public void onUserAgree() {
+									statusRequest.reportTaskLog(WheelionsApplication.getCurrentUserID(TaskDetailActivity.this),
+											currentTask.getId(), getCurrentLocation(), status.getTitle(), status.getCode());
+								}
+								@Override
+								public void onUserCancel() {}
+							});
+						} else {
+							showToastMessage("Failed to load status.");
 						}
 					}
 				});
 				dialog.show();
 			}
 		});
-		btnAddPhoto = (Button) findViewById(R.id.btnAddPhoto);
-		btnAddPhoto.setOnClickListener(new View.OnClickListener() {
+		btnAddPhoto = (TakePhotoButton) findViewById(R.id.btnAddPhoto);
+		btnAddPhoto.initializeData(this);
+		btnAddPhoto.setTakePhotoButtonListener(new TakePhotoButtonListener() {
 			@Override
-			public void onClick(View v) {
-				TaskStatus photoStatus = new TaskStatus("03", "เพิ่มรูป");
-				photoRequest.sendPhotoLog(WheelionsApplication.getCurrentUserID(TaskDetailActivity.this),
-						currentTask.getId(), BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
-						getCurrentLocation(), photoStatus.getTitle(), photoStatus.getCode());
+			public void onImageSelected(final Uri imageUri) {
+				showConfirmationDialog("Upload this photo ?", "Yes", "Cancel", new ConfirmationDialogListener() {
+					@Override
+					public void onUserAgree() {
+						if (imageUri != null) {
+							Bitmap photo = WheelionsApplication.getBitmapFromUri(TaskDetailActivity.this, imageUri);
+							if (photo != null) {
+								TaskStatus photoStatus = new TaskStatus("03", "เพิ่มรูป");
+								photoRequest.sendPhotoLog(WheelionsApplication.getCurrentUserID(TaskDetailActivity.this),
+										currentTask.getId(), photo, getCurrentLocation(), photoStatus.getTitle(), photoStatus.getCode());
+							} else {
+								showToastMessage("Failed to load image.");
+							}
+						} else {
+							showToastMessage("Failed to load image.");
+						}
+					}
+					@Override
+					public void onUserCancel() {
+						btnAddPhoto.clearAllData();
+					}
+				});
 			}
 		});
 		adapter = new TaskLogAdapter(this, allLogs);
@@ -105,6 +139,16 @@ public class TaskDetailActivity extends LocationBasedActivity {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				refreshData();
+			}
+		});
+		lsvTaskLog.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				TaskLogData taskLog = (TaskLogData) parent.getItemAtPosition(position);
+				Intent intent = new Intent(TaskDetailActivity.this, TaskLogDetailActivity.class);
+				intent.putExtra(TaskLogDetailActivity.TASK_LOG, taskLog);
+				startActivity(intent);
 			}
 		});
 		lsvTaskLog.setAdapter(adapter);
@@ -208,5 +252,17 @@ public class TaskDetailActivity extends LocationBasedActivity {
 
 	@Override
 	protected void onLocationChanged() {}
+
+	@Override
+	protected void onDestroy() {
+		btnAddPhoto.clearAllData();
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		btnAddPhoto.onActivityResult(requestCode, resultCode, data);
+	}
 
 }

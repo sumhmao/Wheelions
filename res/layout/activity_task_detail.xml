@@ -136,7 +136,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_font_size" />
 
-            <Button
+            <th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton
                 android:id="@+id/btnAddPhoto"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"

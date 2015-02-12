@@ -47,8 +47,8 @@ import android.widget.EditText;
 
 public class WheelionsApplication extends Application {
 
-	public static final String BACKEND_URL = "http://128.199.118.206/api";
-	public static final String RESOURCE_URL = "http://128.199.118.206/";
+	public static final String BACKEND_URL = "http://testing.pugping.com/api";
+	public static final String RESOURCE_URL = "http://testing.pugping.com/";
 
 	public static final int CONNECTION_TIMEOUT = 45000;
 	public static final int SOCKET_TIMEOUT = 45000;

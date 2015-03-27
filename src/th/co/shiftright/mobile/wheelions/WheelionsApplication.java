@@ -208,6 +208,18 @@ public class WheelionsApplication extends Application {
 		return false;
 	}
 
+	public static boolean getBoolValueFromResponse(Object object) {
+		if (object instanceof String) {
+			String string = (String)object;
+			if (string.equalsIgnoreCase("yes") || string.equalsIgnoreCase("true") || string.equalsIgnoreCase("available"))
+				return true;
+			else
+				return false;
+		} else if (object instanceof Boolean) {
+			return ((Boolean)object).booleanValue();
+		} else return Boolean.getBoolean(object.toString());
+	}
+
 	public static boolean checkIfEditTextIsNullOrEmpty(EditText editText) {
 		String text = editText.getText().toString();
 		if (text.equals("")) {

@@ -251,6 +251,11 @@ public class APIRequest {
 		}
 	}
 
+	public void getCheckList(String driverID, String jobID) {
+		String url = String.format(defaultLocale, "%s/drivers/%s/jobs/%s/check_lists", getBackendUrl(), driverID, jobID);
+		RunRequest(url, HttpMethod.GET);
+	}
+
 }
 
 

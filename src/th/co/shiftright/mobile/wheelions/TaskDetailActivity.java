@@ -1,58 +1,41 @@
 package th.co.shiftright.mobile.wheelions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import th.co.shiftright.mobile.wheelions.adapters.TaskLogAdapter;
+import th.co.shiftright.mobile.wheelions.adapters.CheckListAdapter;
 import th.co.shiftright.mobile.wheelions.api.APIAsyncParam;
 import th.co.shiftright.mobile.wheelions.api.APIRequest;
 import th.co.shiftright.mobile.wheelions.api.APIRequestListener;
 import th.co.shiftright.mobile.wheelions.api.APIRequestResult;
 import th.co.shiftright.mobile.wheelions.custom_controls.CustomProgressDialog;
-import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton;
-import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButtonListener;
-import th.co.shiftright.mobile.wheelions.models.ConfirmationDialogListener;
+import th.co.shiftright.mobile.wheelions.models.CheckPoint;
 import th.co.shiftright.mobile.wheelions.models.TaskData;
-import th.co.shiftright.mobile.wheelions.models.TaskLogData;
-import th.co.shiftright.mobile.wheelions.models.TaskStatus;
 import th.co.shiftright.mobile.wheelions.models.WheelionsData;
 import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshBase;
 import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshListView;
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class TaskDetailActivity extends LocationBasedActivity {
 
 	public static final String TASK = "task";
-	private final int REPORT_STATUS = 1234;
 
 	private TaskData currentTask;
 	private TextView lblTaskDescription;
 	private TextView lblTaskNo;
 	private TextView lblFrom;
 	private TextView lblTo;
-	private Button btnReportStatus;
-	private TakePhotoButton btnAddPhoto;
-	private ArrayList<TaskLogData> allLogs;
-	private TaskLogAdapter adapter;
-	private PullToRefreshListView lsvTaskLog;
-
+	private ArrayList<CheckPoint> allCheckPoints;
+	private PullToRefreshListView lsvCheckList;
+	private CheckListAdapter adapter;
 	private APIRequest request;
-	private APIRequest photoRequest;
 	private CustomProgressDialog loading;
 
 	@Override
@@ -60,7 +43,7 @@ public class TaskDetailActivity extends LocationBasedActivity {
 		super.onCreate(savedInstanceState);
 		currentTask = getIntent().getParcelableExtra(TASK);
 		setContentView(R.layout.activity_task_detail);
-		allLogs = new ArrayList<TaskLogData>();
+		allCheckPoints = new ArrayList<CheckPoint>();
 		initializeComponents();
 		initializeRequests();
 		if (currentTask != null) {
@@ -77,63 +60,16 @@ public class TaskDetailActivity extends LocationBasedActivity {
 		lblTaskNo = (TextView) findViewById(R.id.lblTaskNo);
 		lblFrom = (TextView) findViewById(R.id.lblFrom);
 		lblTo = (TextView) findViewById(R.id.lblTo);
-		btnReportStatus = (Button) findViewById(R.id.btnReportStatus);
-		btnReportStatus.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(TaskDetailActivity.this, ReportStatusActivity.class);
-				intent.putExtra(ReportStatusActivity.TASK, currentTask);
-				startActivityForResult(intent, REPORT_STATUS);
-			}
-		});
-		btnAddPhoto = (TakePhotoButton) findViewById(R.id.btnAddPhoto);
-		btnAddPhoto.initializeData(this);
-		btnAddPhoto.setTakePhotoButtonListener(new TakePhotoButtonListener() {
-			@Override
-			public void onImageSelected(final Uri imageUri) {
-				showConfirmationDialog("Upload this photo ?", "Yes", "Cancel", new ConfirmationDialogListener() {
-					@Override
-					public void onUserAgree() {
-						if (imageUri != null) {
-							Bitmap photo = WheelionsApplication.getBitmapFromUri(TaskDetailActivity.this, imageUri);
-							if (photo != null) {
-								TaskStatus photoStatus = new TaskStatus("03", "เพิ่มรูป");
-								photoRequest.sendPhotoLog(WheelionsApplication.getCurrentUserID(TaskDetailActivity.this),
-										currentTask.getId(), Arrays.asList(photo), getCurrentLocation(), photoStatus.getTitle(), photoStatus.getCode());
-							} else {
-								showToastMessage("Failed to load image.");
-							}
-						} else {
-							showToastMessage("Failed to load image.");
-						}
-					}
-					@Override
-					public void onUserCancel() {
-						btnAddPhoto.clearAllData();
-					}
-				});
-			}
-		});
-		adapter = new TaskLogAdapter(this, allLogs);
-		lsvTaskLog = (PullToRefreshListView) findViewById(R.id.lsvTaskLog);
-		lsvTaskLog.setShowIndicator(false);
-		lsvTaskLog.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		lsvCheckList = (PullToRefreshListView) findViewById(R.id.lsvCheckList);
+		lsvCheckList.setShowIndicator(false);
+		lsvCheckList.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				refreshData();
 			}
 		});
-		lsvTaskLog.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				TaskLogData taskLog = (TaskLogData) parent.getItemAtPosition(position);
-				Intent intent = new Intent(TaskDetailActivity.this, TaskLogDetailActivity.class);
-				intent.putExtra(TaskLogDetailActivity.TASK_LOG, taskLog);
-				startActivity(intent);
-			}
-		});
-		lsvTaskLog.setAdapter(adapter);
+		adapter = new CheckListAdapter(this, allCheckPoints);
+		lsvCheckList.setAdapter(adapter);
 	}
 
 	private void initializeRequests() {
@@ -145,7 +81,7 @@ public class TaskDetailActivity extends LocationBasedActivity {
 				if (succeed && result.isStatusInRange(200, 200)) {
 					onRefreshFinish();
 				} else {
-					showToastMessage("Failed to load log.");
+					showToastMessage("Failed to load checklist.");
 				}
 				succeed = false;
 			}
@@ -153,7 +89,7 @@ public class TaskDetailActivity extends LocationBasedActivity {
 			public void onNoInternetOrLocation(Activity activity) {}
 			@Override
 			public void onConnectionTimeout(Activity activity) {
-				showToastMessage("Failed to load log.");
+				showToastMessage("Failed to load checklist.");
 			}
 			@Override
 			public void doInBackground(APIRequestResult result) {
@@ -162,8 +98,8 @@ public class TaskDetailActivity extends LocationBasedActivity {
 						JSONObject object = new JSONObject(result.GetData());
 						JSONArray array = object.getJSONArray("data");
 						for (int i = 0; i < array.length(); i++) {
-							TaskLogData log = new TaskLogData(array.getJSONObject(i));
-							allLogs.add(log);
+							CheckPoint checkPoint = new CheckPoint(array.getJSONObject(i));
+							allCheckPoints.add(checkPoint);
 						}
 						succeed = true;
 					} catch (JSONException e) {
@@ -172,25 +108,6 @@ public class TaskDetailActivity extends LocationBasedActivity {
 				}
 			}
 		}, loading));
-
-		photoRequest = new APIRequest(new APIAsyncParam(this, new APIRequestListener() {
-			@Override
-			public void onRequestFinish(APIRequestResult result) {
-				if (result.isStatusInRange(200, 200)) {
-					refreshData();
-				} else {
-					showToastMessage("Failed to send photo.");
-				}
-			}
-			@Override
-			public void onNoInternetOrLocation(Activity activity) {}
-			@Override
-			public void onConnectionTimeout(Activity activity) {
-				showToastMessage("Failed to send photo.");
-			}
-			@Override
-			public void doInBackground(APIRequestResult result) {}
-		}, loading, true));
 	}
 
 	private void loadTaskData() {
@@ -201,41 +118,19 @@ public class TaskDetailActivity extends LocationBasedActivity {
 	}
 
 	private void refreshData() {
-		allLogs.clear();
+		allCheckPoints.clear();
 		adapter.notifyDataSetChanged();
-		request.getJobDetail(WheelionsData.instance(this).getUserID(), currentTask.getId());
+		request.getCheckList(WheelionsData.instance(this).getUserID(), currentTask.getId());
 	}
 
 	private void onRefreshFinish() {
-		if (lsvTaskLog.isRefreshing()) {
-			lsvTaskLog.onRefreshComplete();
+		if (lsvCheckList.isRefreshing()) {
+			lsvCheckList.onRefreshComplete();
 		}
 		adapter.notifyDataSetChanged();
 	}
 
 	@Override
 	protected void onLocationChanged() {}
-
-	@Override
-	protected void onDestroy() {
-		btnAddPhoto.clearAllData();
-		super.onDestroy();
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		btnAddPhoto.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-		case REPORT_STATUS: {
-			if (resultCode == RESULT_OK) {
-				refreshData();
-			}
-			break;
-		}
-		default:
-			break;
-		}
-	}
 
 }

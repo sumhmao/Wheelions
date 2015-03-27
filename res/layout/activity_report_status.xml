@@ -1,0 +1,102 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingBottom="30dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    tools:context="th.co.shiftright.mobile.wheelions.ReportStatusActivity"
+    tools:ignore="ContentDescription,UselessParent,ButtonStyle" >
+
+    <RelativeLayout
+        android:id="@+id/top_head_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" >
+
+        <TextView
+            android:id="@+id/title_dialog"
+            style="@style/text_single_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/report_status_dialog"
+            android:textColor="@color/black"
+            android:textSize="@dimen/big_text_font_size" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_head_dialog"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+
+        <Spinner
+            android:id="@+id/snStatusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton
+            android:id="@+id/btnAddPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/item_white_rectangle_ani_bg"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="@string/add_photo"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal_text_font_size" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/imagePreview"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
+        <th.co.shiftright.mobile.wheelions.custom_controls.CirclePageIndicator
+            android:id="@+id/pageIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/item_white_rectangle_ani_bg"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/report_status_dialog_cancel"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal_text_font_size" />
+
+            <Button
+                android:id="@+id/btnReport"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/item_white_rectangle_ani_bg"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/report_status_dialog_submit"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal_text_font_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -6,9 +6,10 @@
     tools:context="th.co.shiftright.mobile.wheelions.TaskLogDetailActivity"
     tools:ignore="ContentDescription,UselessParent,ButtonStyle" >
 
-    <ScrollView
+    <th.co.shiftright.mobile.wheelions.custom_controls.CustomScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:paddingBottom="20dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,31 +46,20 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp" />
 
-            <RelativeLayout
+            <android.support.v4.view.ViewPager
+                android:id="@+id/imagePreview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="250dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/imgPhoto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="20dp"
-                    android:adjustViewBounds="true"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:visibility="gone" />
-
-                <ProgressBar
-                    android:id="@+id/loadingProgressBar"
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:layout_centerInParent="true"
-                    android:indeterminate="true"
-                    android:indeterminateDrawable="@drawable/progress_indeterminate"
-                    android:visibility="gone" />
-            </RelativeLayout>
+            <th.co.shiftright.mobile.wheelions.custom_controls.CirclePageIndicator
+                android:id="@+id/pageIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
         </LinearLayout>
-    </ScrollView>
+    </th.co.shiftright.mobile.wheelions.custom_controls.CustomScrollView>
 
 </RelativeLayout>

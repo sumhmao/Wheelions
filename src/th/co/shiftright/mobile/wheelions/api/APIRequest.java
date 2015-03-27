@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -229,16 +229,18 @@ public class APIRequest {
 		RunFormRequest(url, HttpMethod.POST, parameters);
 	}
 
-	public void sendPhotoLog(String driverID, String jobID, Bitmap photo, LatLng location, String note, String code) {
-		if (photo != null) {
+	public void sendPhotoLog(String driverID, String jobID, List<Bitmap> photos, LatLng location, String note, String code) {
+		if (photos != null) {
 			String url = String.format(defaultLocale, "%s/drivers/%s/jobs/%s/job_logs", getBackendUrl(), driverID, jobID);
 			HashMap<String, Object> parameters = new HashMap<String, Object>();
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			photo.compress(CompressFormat.JPEG, 100, bos);
-			byte[] imgData = bos.toByteArray();
-			parameters.put("content", imgData);
-			parameters.put("filename", String.format(Locale.US, "img%d", Calendar.getInstance().getTime().getTime()));
-			parameters.put("content_type", "image/jpeg");
+			int index = 0;
+			for (Bitmap photo : photos) {
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				photo.compress(CompressFormat.JPEG, 100, bos);
+				byte[] imgData = bos.toByteArray();
+				parameters.put(String.format(Locale.US, "images[%d]", index) , imgData);
+				index++;
+			}
 			if (location != null) {
 				parameters.put("latitude", location.latitude);
 				parameters.put("longitude", location.longitude);

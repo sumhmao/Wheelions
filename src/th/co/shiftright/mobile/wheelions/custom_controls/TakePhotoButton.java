@@ -161,8 +161,8 @@ public class TakePhotoButton extends Button implements OnClickListener {
 			ExifInterface exif = new ExifInterface(imagePath);
 			ContentValues v = new ContentValues();
 			v.put(Images.Media.TITLE, title);
-			v.put(Images.Media.DISPLAY_NAME, "SuperBowl Image");
-			v.put(Images.Media.DESCRIPTION, "Taken by SuperBowl");
+			v.put(Images.Media.DISPLAY_NAME, "Wheelions Image");
+			v.put(Images.Media.DESCRIPTION, "Taken by Wheelions");
 			long currentDate = Calendar.getInstance().getTime().getTime();
 			v.put(Images.Media.DATE_ADDED, currentDate);
 			v.put(Images.Media.DATE_TAKEN, currentDate);

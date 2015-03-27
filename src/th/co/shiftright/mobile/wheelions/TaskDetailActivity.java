@@ -1,6 +1,7 @@
 package th.co.shiftright.mobile.wheelions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,8 +13,6 @@ import th.co.shiftright.mobile.wheelions.api.APIRequest;
 import th.co.shiftright.mobile.wheelions.api.APIRequestListener;
 import th.co.shiftright.mobile.wheelions.api.APIRequestResult;
 import th.co.shiftright.mobile.wheelions.custom_controls.CustomProgressDialog;
-import th.co.shiftright.mobile.wheelions.custom_controls.ReportStatusDialog;
-import th.co.shiftright.mobile.wheelions.custom_controls.ReportStatusDialogListener;
 import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton;
 import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButtonListener;
 import th.co.shiftright.mobile.wheelions.models.ConfirmationDialogListener;
@@ -39,6 +38,7 @@ import android.widget.TextView;
 public class TaskDetailActivity extends LocationBasedActivity {
 
 	public static final String TASK = "task";
+	private final int REPORT_STATUS = 1234;
 
 	private TaskData currentTask;
 	private TextView lblTaskDescription;
@@ -52,7 +52,6 @@ public class TaskDetailActivity extends LocationBasedActivity {
 	private PullToRefreshListView lsvTaskLog;
 
 	private APIRequest request;
-	private APIRequest statusRequest;
 	private APIRequest photoRequest;
 	private CustomProgressDialog loading;
 
@@ -82,26 +81,9 @@ public class TaskDetailActivity extends LocationBasedActivity {
 		btnReportStatus.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ReportStatusDialog dialog = new ReportStatusDialog(TaskDetailActivity.this);
-				dialog.setReportStatusDialogListener(new ReportStatusDialogListener() {
-					@Override
-					public void onStatusReported(final TaskStatus status) {
-						if (status != null) {
-							showConfirmationDialog("Upload this status ?", "Yes", "Cancel", new ConfirmationDialogListener() {
-								@Override
-								public void onUserAgree() {
-									statusRequest.reportTaskLog(WheelionsApplication.getCurrentUserID(TaskDetailActivity.this),
-											currentTask.getId(), getCurrentLocation(), status.getTitle(), status.getCode());
-								}
-								@Override
-								public void onUserCancel() {}
-							});
-						} else {
-							showToastMessage("Failed to load status.");
-						}
-					}
-				});
-				dialog.show();
+				Intent intent = new Intent(TaskDetailActivity.this, ReportStatusActivity.class);
+				intent.putExtra(ReportStatusActivity.TASK, currentTask);
+				startActivityForResult(intent, REPORT_STATUS);
 			}
 		});
 		btnAddPhoto = (TakePhotoButton) findViewById(R.id.btnAddPhoto);
@@ -117,7 +99,7 @@ public class TaskDetailActivity extends LocationBasedActivity {
 							if (photo != null) {
 								TaskStatus photoStatus = new TaskStatus("03", "เพิ่มรูป");
 								photoRequest.sendPhotoLog(WheelionsApplication.getCurrentUserID(TaskDetailActivity.this),
-										currentTask.getId(), photo, getCurrentLocation(), photoStatus.getTitle(), photoStatus.getCode());
+										currentTask.getId(), Arrays.asList(photo), getCurrentLocation(), photoStatus.getTitle(), photoStatus.getCode());
 							} else {
 								showToastMessage("Failed to load image.");
 							}
@@ -191,25 +173,6 @@ public class TaskDetailActivity extends LocationBasedActivity {
 			}
 		}, loading));
 
-		statusRequest = new APIRequest(new APIAsyncParam(this, new APIRequestListener() {
-			@Override
-			public void onRequestFinish(APIRequestResult result) {
-				if (result.isStatusInRange(200, 200)) {
-					refreshData();
-				} else {
-					showToastMessage("Failed to send log.");
-				}
-			}
-			@Override
-			public void onNoInternetOrLocation(Activity activity) {}
-			@Override
-			public void onConnectionTimeout(Activity activity) {
-				showToastMessage("Failed to send log.");
-			}
-			@Override
-			public void doInBackground(APIRequestResult result) {}
-		}, loading));
-
 		photoRequest = new APIRequest(new APIAsyncParam(this, new APIRequestListener() {
 			@Override
 			public void onRequestFinish(APIRequestResult result) {
@@ -263,6 +226,16 @@ public class TaskDetailActivity extends LocationBasedActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		btnAddPhoto.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case REPORT_STATUS: {
+			if (resultCode == RESULT_OK) {
+				refreshData();
+			}
+			break;
+		}
+		default:
+			break;
+		}
 	}
 
 }

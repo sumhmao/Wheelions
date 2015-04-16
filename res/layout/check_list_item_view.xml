@@ -47,6 +47,19 @@
         android:adjustViewBounds="true"
         android:background="@null"
         android:scaleType="fitCenter"
+        android:src="@drawable/required_photo"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imgPOI"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="top"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:padding="2dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/poi"
         android:visibility="gone" />
 
 </LinearLayout>

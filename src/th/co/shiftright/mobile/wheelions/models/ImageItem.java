@@ -22,6 +22,10 @@ public class ImageItem implements Parcelable, IImageItem {
 	public void setImageCategory(ImageCategory category) {
 		imageCategory = category;
 	}
+	private boolean useResourceUrl = true;
+	public void setUseResourceUrl(boolean useResourceUrl) {
+		this.useResourceUrl = useResourceUrl;
+	}
 
 	public String getId() {
 		return id;
@@ -77,6 +81,10 @@ public class ImageItem implements Parcelable, IImageItem {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
 						this.setOriginal(object.getString(key));
 					}
+				} else if (key.equalsIgnoreCase("useResourceUrl")) {
+					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
+						useResourceUrl = WheelionsApplication.getBoolValueFromResponse(object.get(key));
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -91,6 +99,7 @@ public class ImageItem implements Parcelable, IImageItem {
 			json.put("thumb", getThumb());
 			json.put("preview", getPreview());
 			json.put("original", getOriginal());
+			json.put("useResourceUrl", useResourceUrl);
 			return json;
 		} catch (Exception e) {
 			return null;
@@ -109,6 +118,7 @@ public class ImageItem implements Parcelable, IImageItem {
 		dest.writeString(preview);
 		dest.writeString(original);
 		dest.writeString(ImageCategory.toString(imageCategory));
+		dest.writeValue(Boolean.valueOf(useResourceUrl));
 	}
 
 	public ImageItem(Parcel in) {
@@ -118,6 +128,7 @@ public class ImageItem implements Parcelable, IImageItem {
 		this.original = in.readString();
 		String category = in.readString();
 		this.imageCategory = ImageCategory.fromString(category);
+		this.useResourceUrl = ((Boolean) in.readValue(Boolean.class.getClassLoader())).booleanValue();
 	}
 
 	public static final Parcelable.Creator<ImageItem> CREATOR = new Parcelable.Creator<ImageItem>() {
@@ -135,15 +146,28 @@ public class ImageItem implements Parcelable, IImageItem {
 	}
 	@Override
 	public String getImageUrl(ImageSize size) {
-		switch (size) {
-		case Thumb:
-			return WheelionsApplication.getResourceUrl(getThumb());
-		case Normal:
-			return WheelionsApplication.getResourceUrl(getPreview());
-		case Original:
-			return WheelionsApplication.getResourceUrl(getOriginal());
-		default:
-			return WheelionsApplication.getResourceUrl(getPreview());
+		if (useResourceUrl) {
+			switch (size) {
+			case Thumb:
+				return WheelionsApplication.getResourceUrl(getThumb());
+			case Normal:
+				return WheelionsApplication.getResourceUrl(getPreview());
+			case Original:
+				return WheelionsApplication.getResourceUrl(getOriginal());
+			default:
+				return WheelionsApplication.getResourceUrl(getPreview());
+			}
+		} else {
+			switch (size) {
+			case Thumb:
+				return getThumb();
+			case Normal:
+				return getPreview();
+			case Original:
+				return getOriginal();
+			default:
+				return getPreview();
+			}
 		}
 	}
 	@Override

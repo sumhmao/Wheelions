@@ -27,6 +27,9 @@
     <!-- Task Log Detail Activity -->
     <string name="log_note_format">บักทึก: %s</string>
     <string name="log_time_format">เวลา: %s</string>
+    
+    <!-- Check Point Detail Activity -->
+    <string name="add_new_log">เพิ่มข้อมูล</string>
 
     <!-- Take Photo Button -->
     <string name="edit_text_view_submit">OK</string>

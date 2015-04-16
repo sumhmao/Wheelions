@@ -26,6 +26,7 @@ public class CheckPoint implements Parcelable {
 	private LatLng location;
 	private int orderNo;
 	private boolean isFinished;
+	private boolean isCompleted;
 	private Date finishedAt;
 	private boolean hasFinished = false;
 	private Date createdAt;
@@ -93,6 +94,12 @@ public class CheckPoint implements Parcelable {
 	}
 	public void setFinished(boolean isFinished) {
 		this.isFinished = isFinished;
+	}
+	public boolean isCompleted() {
+		return isCompleted;
+	}
+	public void setCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
 	}
 	public Date getFinishedAt() {
 		return finishedAt;
@@ -186,6 +193,10 @@ public class CheckPoint implements Parcelable {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
 						this.setFinished(WheelionsApplication.getBoolValueFromResponse(object.get(key)));
 					}
+				} else if (key.equalsIgnoreCase("is_completed")) {
+					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
+						this.setCompleted(WheelionsApplication.getBoolValueFromResponse(object.get(key)));
+					}
 				} else if (key.equalsIgnoreCase("finished_at")) {
 					if (WheelionsApplication.checkJSONObjectForKey(key, object)) {
 						if (object.getString(key) instanceof String) {
@@ -243,6 +254,7 @@ public class CheckPoint implements Parcelable {
 		dest.writeParcelable(location, flags);
 		dest.writeInt(orderNo);
 		dest.writeValue(Boolean.valueOf(isFinished));
+		dest.writeValue(Boolean.valueOf(isCompleted));
 		dest.writeValue(Boolean.valueOf(hasFinished));
 		if (hasFinished) {
 			dest.writeLong(getFinishedAt().getTime());
@@ -270,6 +282,7 @@ public class CheckPoint implements Parcelable {
 		this.location = in.readParcelable(LatLng.class.getClassLoader());
 		this.orderNo = in.readInt();
 		this.isFinished = ((Boolean) in.readValue(Boolean.class.getClassLoader())).booleanValue();
+		this.isCompleted = ((Boolean) in.readValue(Boolean.class.getClassLoader())).booleanValue();
 		this.hasFinished = ((Boolean) in.readValue(Boolean.class.getClassLoader())).booleanValue();
 		if (hasFinished) {
 			this.finishedAt = new Date(in.readLong());

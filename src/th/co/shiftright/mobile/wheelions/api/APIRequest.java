@@ -251,8 +251,34 @@ public class APIRequest {
 		}
 	}
 
+	public void sendCheckPointLog(String driverID, String jobID, String checkListID, List<Bitmap> photos, LatLng location, String note) {
+		String url = String.format(defaultLocale, "%s/drivers/%s/jobs/%s/check_lists/%s/create_log", getBackendUrl(), driverID, jobID, checkListID);
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		if (photos != null) {
+			int index = 0;
+			for (Bitmap photo : photos) {
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				photo.compress(CompressFormat.JPEG, 100, bos);
+				byte[] imgData = bos.toByteArray();
+				parameters.put(String.format(Locale.US, "images[%d]", index) , imgData);
+				index++;
+			}
+		}
+		if (location != null) {
+			parameters.put("latitude", location.latitude);
+			parameters.put("longitude", location.longitude);
+		}
+		parameters.put("note", note);
+		RunFormRequest(url, HttpMethod.POST, parameters);
+	}
+
 	public void getCheckList(String driverID, String jobID) {
 		String url = String.format(defaultLocale, "%s/drivers/%s/jobs/%s/check_lists", getBackendUrl(), driverID, jobID);
+		RunRequest(url, HttpMethod.GET);
+	}
+
+	public void getCheckPoint(String driverID, String jobID, String checkListID) {
+		String url = String.format(defaultLocale, "%s/drivers/%s/jobs/%s/check_lists/%s", getBackendUrl(), driverID, jobID, checkListID);
 		RunRequest(url, HttpMethod.GET);
 	}
 

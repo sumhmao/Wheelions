@@ -18,6 +18,7 @@ public class CheckListItemView extends LinearLayout {
 	private View line;
 	private TextView lblListTitle;
 	private ImageView imgPhotoNeeded;
+	private ImageView imgPOI;
 	private CheckPoint currentData;
 	public CheckPoint getData() {
 		return currentData;
@@ -45,12 +46,13 @@ public class CheckListItemView extends LinearLayout {
 		line = parentView.findViewById(R.id.line);
 		lblListTitle = (TextView) parentView.findViewById(R.id.lblListTitle);
 		imgPhotoNeeded = (ImageView) parentView.findViewById(R.id.imgPhotoNeeded);
+		imgPOI = (ImageView) parentView.findViewById(R.id.imgPOI);
 	}
 
 	public void setData(CheckPoint data, boolean showLine) {
 		currentData = data;
 		lblListTitle.setText(data.getTitle());
-		imgCheckIcon.setSelected(data.isFinished());
+		imgCheckIcon.setSelected(data.isCompleted());
 		if (showLine) {
 			line.setVisibility(View.VISIBLE);
 		} else {
@@ -60,6 +62,11 @@ public class CheckListItemView extends LinearLayout {
 			imgPhotoNeeded.setVisibility(View.VISIBLE);
 		} else {
 			imgPhotoNeeded.setVisibility(View.GONE);
+		}
+		if (data.isHasPOI()) {
+			imgPOI.setVisibility(View.VISIBLE);
+		} else {
+			imgPOI.setVisibility(View.GONE);
 		}
 	}
 

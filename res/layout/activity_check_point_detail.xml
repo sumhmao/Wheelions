@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="th.co.shiftright.mobile.wheelions.CheckPointDetailActivity" >
+
+    <TextView
+        android:id="@+id/lblCheckPointTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/big_text_font_size" />
+
+    <TextView
+        android:id="@+id/lblCheckPointDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/normal_text_font_size" />
+
+    <ListView
+        android:id="@+id/lsvLog"
+        style="@style/default_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:overScrollMode="never" />
+
+    <Button
+        android:id="@+id/btnReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_rectangle_ani_bg"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/add_new_log"
+        android:textColor="@color/black"
+        android:textSize="@dimen/normal_text_font_size" />
+
+</LinearLayout>

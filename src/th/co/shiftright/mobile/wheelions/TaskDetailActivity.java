@@ -19,13 +19,18 @@ import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshBase;
 import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshListView;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class TaskDetailActivity extends LocationBasedActivity {
 
 	public static final String TASK = "task";
+	public static final int REPORT_CHECKPOINT = 1234;
 
 	private TaskData currentTask;
 	private TextView lblTaskDescription;
@@ -66,6 +71,21 @@ public class TaskDetailActivity extends LocationBasedActivity {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				refreshData();
+			}
+		});
+		lsvCheckList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				CheckPoint checkPoint = (CheckPoint) parent.getItemAtPosition(position);
+				if (!checkPoint.isCompleted()) {
+					Intent intent = new Intent(TaskDetailActivity.this, ReportStatusActivity.class);
+					intent.putExtra(ReportStatusActivity.CHECK_POINT, checkPoint);
+					startActivityForResult(intent, REPORT_CHECKPOINT);
+				} else {
+					Intent intent = new Intent(TaskDetailActivity.this, CheckPointDetailActivity.class);
+					intent.putExtra(CheckPointDetailActivity.CHECK_POINT, checkPoint);
+					startActivityForResult(intent, REPORT_CHECKPOINT);
+				}
 			}
 		});
 		adapter = new CheckListAdapter(this, allCheckPoints);
@@ -132,5 +152,20 @@ public class TaskDetailActivity extends LocationBasedActivity {
 
 	@Override
 	protected void onLocationChanged() {}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case REPORT_CHECKPOINT: {
+			if (resultCode == RESULT_OK) {
+				refreshData();
+			}
+			break;
+		}
+		default:
+			break;
+		}
+	}
 
 }

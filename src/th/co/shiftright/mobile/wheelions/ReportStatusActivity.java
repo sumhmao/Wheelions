@@ -2,6 +2,9 @@ package th.co.shiftright.mobile.wheelions;
 
 import java.util.ArrayList;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+
 import th.co.shiftright.mobile.wheelions.adapters.StatusSpinnerAdapter;
 import th.co.shiftright.mobile.wheelions.api.APIAsyncParam;
 import th.co.shiftright.mobile.wheelions.api.APIRequest;
@@ -13,9 +16,11 @@ import th.co.shiftright.mobile.wheelions.custom_controls.ImagePreviewItem;
 import th.co.shiftright.mobile.wheelions.custom_controls.ImagePreviewItemListener;
 import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton;
 import th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButtonListener;
+import th.co.shiftright.mobile.wheelions.models.CheckPoint;
 import th.co.shiftright.mobile.wheelions.models.ConfirmationDialogListener;
 import th.co.shiftright.mobile.wheelions.models.TaskData;
 import th.co.shiftright.mobile.wheelions.models.TaskStatus;
+import GoogleMaps.GoogleMapsMapView;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,12 +33,20 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
-public class ReportStatusActivity extends LocationBasedActivity {
+public class ReportStatusActivity extends MapBasedActivity {
 
 	public static final String TASK = "task";
+	public static final String CHECK_POINT = "checkpoint";
 	private TaskData currentTask;
+	private CheckPoint checkPoint;
+	private GoogleMapsMapView mapView = null;
+	private LinearLayout checkPointDataPanel;
+	private TextView lblCheckPointTitle;
+	private TextView lblCheckPointDetail;
 	private Spinner snStatusSpinner;
 	private ArrayList<TaskStatus> allStatus;
 	private StatusSpinnerAdapter adapter;
@@ -50,15 +63,17 @@ public class ReportStatusActivity extends LocationBasedActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_report_status);
 		currentTask = getIntent().getParcelableExtra(TASK);
+		checkPoint = getIntent().getParcelableExtra(CHECK_POINT);
+		super.onCreate(savedInstanceState);
 		allPhotos = new ArrayList<Uri>();
-		allStatus = new ArrayList<TaskStatus>();
-		allStatus.add(new TaskStatus("02", "รับของ"));
-		allStatus.add(new TaskStatus("03", "รายงานตำแหน่ง"));
-		allStatus.add(new TaskStatus("04", "ถึงปลายทาง"));
-		allStatus.add(new TaskStatus("99", "ปิดงาน"));
+		if (currentTask != null) {
+			allStatus = new ArrayList<TaskStatus>();
+			allStatus.add(new TaskStatus("02", "รับของ"));
+			allStatus.add(new TaskStatus("03", "รายงานตำแหน่ง"));
+			allStatus.add(new TaskStatus("04", "ถึงปลายทาง"));
+			allStatus.add(new TaskStatus("99", "ปิดงาน"));
+		}
 		previewListener = new ImagePreviewItemListener() {
 			@Override
 			public void onImageRemove(Uri currentImage) {
@@ -70,13 +85,22 @@ public class ReportStatusActivity extends LocationBasedActivity {
 		initializeRequests();
 	}
 
-	@Override
-	protected void onLocationChanged() {}
-
 	private void initializeComponents() {
 		snStatusSpinner = (Spinner) findViewById(R.id.snStatusSpinner);
-		adapter = new StatusSpinnerAdapter(this, allStatus);
-		snStatusSpinner.setAdapter(adapter);
+		if (currentTask != null) {
+			adapter = new StatusSpinnerAdapter(this, allStatus);
+			snStatusSpinner.setAdapter(adapter);
+		} else {
+			snStatusSpinner.setVisibility(View.GONE);
+			if (checkPoint != null) {
+				checkPointDataPanel = (LinearLayout) findViewById(R.id.checkPointDataPanel);
+				checkPointDataPanel.setVisibility(View.VISIBLE);
+				lblCheckPointTitle = (TextView) findViewById(R.id.lblCheckPointTitle);
+				lblCheckPointDetail = (TextView) findViewById(R.id.lblCheckPointDetail);
+				lblCheckPointTitle.setText(checkPoint.getTitle());
+				lblCheckPointDetail.setText(checkPoint.getDescription());
+			}
+		}
 		btnAddPhoto = (TakePhotoButton) findViewById(R.id.btnAddPhoto);
 		btnAddPhoto.initializeData(this);
 		btnAddPhoto.setTakePhotoButtonListener(new TakePhotoButtonListener() {
@@ -107,22 +131,10 @@ public class ReportStatusActivity extends LocationBasedActivity {
 		btnReport.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final TaskStatus status = (TaskStatus) snStatusSpinner.getSelectedItem();
 				showConfirmationDialog("Upload this status ?", "Yes", "Cancel", new ConfirmationDialogListener() {
 					@Override
 					public void onUserAgree() {
-						if (allPhotos.size() == 0) {
-							statusRequest.reportTaskLog(WheelionsApplication.getCurrentUserID(ReportStatusActivity.this),
-									currentTask.getId(), getCurrentLocation(), status.getTitle(), status.getCode());
-						} else {
-							ArrayList<Bitmap> photos = new ArrayList<Bitmap>();
-							for (Uri uri : allPhotos) {
-								Bitmap photo = WheelionsApplication.getBitmapFromUri(ReportStatusActivity.this, uri);
-								photos.add(photo);
-							}
-							statusRequest.sendPhotoLog(WheelionsApplication.getCurrentUserID(ReportStatusActivity.this),
-									currentTask.getId(), photos, getCurrentLocation(), status.getTitle(), status.getCode());
-						}
+						doSendData();
 					}
 					@Override
 					public void onUserCancel() {}
@@ -188,6 +200,76 @@ public class ReportStatusActivity extends LocationBasedActivity {
 		btnAddPhoto.onActivityResult(requestCode, resultCode, data);
 	}
 
+	@Override
+	protected void initializePage() {
+		setContentView(R.layout.activity_report_status);
+	}
+
+	@Override
+	protected GoogleMapsMapView getGoogleMapsView() {
+		if (mapView == null) {
+			GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.googleMapsView)).getMap();
+			if (map != null) {
+				mapView = new GoogleMapsMapView(this, map);
+			}
+		}
+		return mapView;
+	}
+
+	@Override
+	protected void onGoogleMapLoaded() {}
+
+	@Override
+	protected void onFailedToLoadGoogleMap() {
+		showToastMessage("Unable to load google maps.");
+	}
+
+	private void doSendData() {
+		if (currentTask != null) {
+			TaskStatus status = (TaskStatus) snStatusSpinner.getSelectedItem();
+			if (allPhotos.size() == 0) {
+				statusRequest.reportTaskLog(WheelionsApplication.getCurrentUserID(ReportStatusActivity.this),
+						currentTask.getId(), getCurrentLocation(), status.getTitle(), status.getCode());
+			} else {
+				ArrayList<Bitmap> photos = new ArrayList<Bitmap>();
+				for (Uri uri : allPhotos) {
+					Bitmap photo = WheelionsApplication.getBitmapFromUri(ReportStatusActivity.this, uri);
+					photos.add(photo);
+				}
+				statusRequest.sendPhotoLog(WheelionsApplication.getCurrentUserID(ReportStatusActivity.this),
+						currentTask.getId(), photos, getCurrentLocation(), status.getTitle(), status.getCode());
+			}
+		} else if (checkPoint != null) {
+			if (allPhotos.size() > 0) {
+				ArrayList<Bitmap> photos = new ArrayList<Bitmap>();
+				for (Uri uri : allPhotos) {
+					Bitmap photo = WheelionsApplication.getBitmapFromUri(ReportStatusActivity.this, uri);
+					photos.add(photo);
+				}
+				statusRequest.sendCheckPointLog(WheelionsApplication.getCurrentUserID(ReportStatusActivity.this),
+						checkPoint.getJobId(), checkPoint.getId(), photos, getCurrentLocation(), checkPoint.getTitle());
+			} else {
+				statusRequest.sendCheckPointLog(WheelionsApplication.getCurrentUserID(ReportStatusActivity.this),
+						checkPoint.getJobId(), checkPoint.getId(), null, getCurrentLocation(), checkPoint.getTitle());	
+			}
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (allPhotos.size() > 0) {
+			showConfirmationDialog("All data will be lost ?", "Yes", "Cancel", new ConfirmationDialogListener() {
+				@Override
+				public void onUserAgree() {
+					ReportStatusActivity.super.onBackPressed();
+				}
+				@Override
+				public void onUserCancel() {}
+			});
+		} else {
+			super.onBackPressed();
+		}
+	}
 }
 
 class PreviewPagerAdapter extends PagerAdapter {
@@ -248,4 +330,9 @@ class PreviewPagerAdapter extends PagerAdapter {
 
 	@Override
 	public void startUpdate(View arg0) {}
+
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
 }

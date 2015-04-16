@@ -26,77 +26,116 @@
             android:textSize="@dimen/big_text_font_size" />
     </RelativeLayout>
 
-    <LinearLayout
+    <th.co.shiftright.mobile.wheelions.custom_controls.CustomScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/top_head_dialog"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp" >
-
-        <Spinner
-            android:id="@+id/snStatusSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton
-            android:id="@+id/btnAddPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/item_white_rectangle_ani_bg"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:text="@string/add_photo"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_font_size" />
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/imagePreview"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="10dp"
-            android:visibility="gone" />
-
-        <th.co.shiftright.mobile.wheelions.custom_controls.CirclePageIndicator
-            android:id="@+id/pageIndicator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:visibility="gone" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_head_dialog" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal" >
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
 
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="0dip"
+            <Spinner
+                android:id="@+id/snStatusSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/checkPointDataPanel"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/lblCheckPointTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/big_text_font_size" />
+
+                <TextView
+                    android:id="@+id/lblCheckPointDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/normal_text_font_size" />
+            </LinearLayout>
+
+            <fragment
+                android:id="@+id/googleMapsView"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp" />
+
+            <th.co.shiftright.mobile.wheelions.custom_controls.TakePhotoButton
+                android:id="@+id/btnAddPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/item_white_rectangle_ani_bg"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
-                android:text="@string/report_status_dialog_cancel"
+                android:text="@string/add_photo"
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_font_size" />
 
-            <Button
-                android:id="@+id/btnReport"
-                android:layout_width="0dip"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/imagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
+
+            <th.co.shiftright.mobile.wheelions.custom_controls.CirclePageIndicator
+                android:id="@+id/pageIndicator"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/item_white_rectangle_ani_bg"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:text="@string/report_status_dialog_submit"
-                android:textColor="@color/black"
-                android:textSize="@dimen/normal_text_font_size" />
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_white_rectangle_ani_bg"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/report_status_dialog_cancel"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/normal_text_font_size" />
+
+                <Button
+                    android:id="@+id/btnReport"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_white_rectangle_ani_bg"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/report_status_dialog_submit"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/normal_text_font_size" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </th.co.shiftright.mobile.wheelions.custom_controls.CustomScrollView>
 
 </RelativeLayout>

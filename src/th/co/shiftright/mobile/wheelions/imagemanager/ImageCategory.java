@@ -2,7 +2,8 @@ package th.co.shiftright.mobile.wheelions.imagemanager;
 
 public enum ImageCategory {
 	User,
-	TaskLog;
+	TaskLog,
+	StaticMap;
 
 	public static String toString(ImageCategory size) {
 		switch (size) {
@@ -10,6 +11,8 @@ public enum ImageCategory {
 			return "user";
 		case TaskLog:
 			return "tasklog";
+		case StaticMap:
+			return "staticmap";
 		default:
 			return "user";
 		}
@@ -20,6 +23,8 @@ public enum ImageCategory {
 			return ImageCategory.User;
 		} else if (size.equals("tasklog")) {
 			return ImageCategory.TaskLog;
+		} else if (size.equals("staticmap")) {
+			return ImageCategory.StaticMap;
 		} else {
 			return ImageCategory.User;
 		}

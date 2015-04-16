@@ -3,6 +3,7 @@ package th.co.shiftright.mobile.wheelions.models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ import th.co.shiftright.mobile.wheelions.imagemanager.ImageCategory;
 import th.co.shiftright.mobile.wheelions.imagemanager.ImageDownloadEventListener;
 import th.co.shiftright.mobile.wheelions.imagemanager.ImageSize;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -26,6 +28,10 @@ public class TaskLogData implements Parcelable {
 	private boolean isHasTime = false;
 	private Date time;
 	private ArrayList<ImageItem> allPhotos;
+	private ImageItem staticMap;
+	public ImageItem getStaticMap() {
+		return staticMap;
+	}
 
 	public String getId() {
 		return id;
@@ -122,6 +128,22 @@ public class TaskLogData implements Parcelable {
 			}
 		}
 		location = new LatLng(latitude, longitude);
+	}
+
+	public void generateStaticMap(Context context) {
+		if (staticMap == null) {
+			int width = WheelionsApplication.getScreenWidth(context);
+			int height = WheelionsApplication.getDPFromPixel(context, 120);
+			String url = String.format(Locale.US, "http://maps.google.com/maps/api/staticmap?center=%f,%f&zoom=15&size=%dx%d&markers=color:blue%%7C%f,%f", 
+					getLocation().latitude, getLocation().longitude, width, height, getLocation().latitude, getLocation().longitude);
+			staticMap = new ImageItem();
+			staticMap.setId(getId());
+			staticMap.setImageCategory(ImageCategory.StaticMap);
+			staticMap.setOriginal(url);
+			staticMap.setPreview(url);
+			staticMap.setThumb(url);
+			staticMap.setUseResourceUrl(false);
+		}
 	}
 
 	public AsyncTaskQueueItem getImageTask(final ImageDownloadEventListener listener, final int photoSize) {

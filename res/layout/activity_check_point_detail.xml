@@ -11,8 +11,11 @@
         android:id="@+id/lblCheckPointTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/orange"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:textColor="@color/white"
         android:textSize="@dimen/big_text_font_size" />
 
     <TextView

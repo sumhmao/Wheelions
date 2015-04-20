@@ -18,11 +18,14 @@
         <TextView
             android:id="@+id/lblTaskDescription"
             style="@style/text_single_line"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
+            android:background="@color/orange"
+            android:gravity="center"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:textColor="@color/white"
             android:textIsSelectable="false"
             android:textSize="@dimen/normal_text_font_size" />
 
@@ -115,6 +118,20 @@
                 android:textIsSelectable="false"
                 android:textSize="@dimen/normal_text_font_size" />
         </LinearLayout>
+
+        <TextView
+            style="@style/text_single_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/light_blue"
+            android:gravity="center"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/checklist"
+            android:textColor="@color/black"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/small_text_font_size" />
 
         <th.co.shiftright.mobile.wheelions.pulltorefresh.PullToRefreshListView
             android:id="@+id/lsvCheckList"

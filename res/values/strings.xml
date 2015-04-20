@@ -12,6 +12,7 @@
 
     <!-- Task List Activity -->
     <string name="report_location">+ รายงานตำแหน่ง</string>
+    <string name="task_list">Task Lists</string>
     <string name="bullet">></string>
 
     <!-- Task Detail Activity -->
@@ -20,6 +21,7 @@
     <string name="to">ปลายทาง :</string>
     <string name="report_status">รายงานสถานะ</string>
     <string name="add_photo">เพิ่มรูป</string>
+    <string name="checklist">Check Lists</string>
     <string name="report_status_dialog">รายงานสถานะ</string>
     <string name="report_status_dialog_cancel">ยกเลิก</string>
     <string name="report_status_dialog_submit">บันทึก</string>
@@ -27,7 +29,7 @@
     <!-- Task Log Detail Activity -->
     <string name="log_note_format">บักทึก: %s</string>
     <string name="log_time_format">เวลา: %s</string>
-    
+
     <!-- Check Point Detail Activity -->
     <string name="add_new_log">เพิ่มข้อมูล</string>
 

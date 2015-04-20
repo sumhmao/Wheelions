@@ -27,7 +27,9 @@
     <color name="transparent">#00ffffff</color>
     <color name="yellow_light">#fef6a9</color>
     <color name="dark_gray_light">#8ea2ae</color>
-    <color name="orange">#f47b20</color>
+    <color name="orange">#ff9500</color>
+    <color name="light_blue">#d9edf7</color>
+    <color name="light_green">#dff0d8</color>
     <color name="red">#e51c22</color>
 
 </resources>

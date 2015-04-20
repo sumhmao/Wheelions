@@ -14,7 +14,7 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class CheckPoint implements Parcelable {
+public class CheckPoint implements Parcelable, ILocation {
 
 	private String id;
 	private String jobId;
@@ -35,6 +35,7 @@ public class CheckPoint implements Parcelable {
 	private boolean hasUpdated = false;
 	private ArrayList<TaskLogData> allLogs;
 
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -77,6 +78,7 @@ public class CheckPoint implements Parcelable {
 	public void setNote(String note) {
 		this.note = note;
 	}
+	@Override
 	public LatLng getLocation() {
 		return location;
 	}

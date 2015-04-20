@@ -22,8 +22,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +39,7 @@ public class TaskDetailActivity extends LocationBasedActivity {
 	private TextView lblTaskNo;
 	private TextView lblFrom;
 	private TextView lblTo;
+	private Button btnMap;
 	private ArrayList<CheckPoint> allCheckPoints;
 	private PullToRefreshListView lsvCheckList;
 	private CheckListAdapter adapter;
@@ -90,6 +93,15 @@ public class TaskDetailActivity extends LocationBasedActivity {
 		});
 		adapter = new CheckListAdapter(this, allCheckPoints);
 		lsvCheckList.setAdapter(adapter);
+		btnMap = (Button) findViewById(R.id.btnMap);
+		btnMap.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(TaskDetailActivity.this, CheckListsMapActivity.class);
+				intent.putExtra(CheckListsMapActivity.CHECK_POINTS, allCheckPoints);
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void initializeRequests() {

@@ -21,6 +21,7 @@
     <string name="to">ปลายทาง :</string>
     <string name="report_status">รายงานสถานะ</string>
     <string name="add_photo">เพิ่มรูป</string>
+    <string name="map_view">ดูแผนที่ POI</string>
     <string name="checklist">Check Lists</string>
     <string name="report_status_dialog">รายงานสถานะ</string>
     <string name="report_status_dialog_cancel">ยกเลิก</string>

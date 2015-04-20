@@ -1,7 +1,7 @@
 package GoogleMaps;
 
 import th.co.shiftright.mobile.wheelions.R;
-import th.co.shiftright.mobile.wheelions.models.TaskLogData;
+import th.co.shiftright.mobile.wheelions.models.ILocation;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
@@ -16,12 +16,12 @@ public class PlacePin implements ClusterItem {
 		return startWithSelected;
 	}
 
-	private TaskLogData currentLog;
-	public TaskLogData getLog() {
+	private ILocation currentLog;
+	public ILocation getLog() {
 		return currentLog;
 	}
 
-	public PlacePin(TaskLogData place) {
+	public PlacePin(ILocation place) {
 		this.currentLog = place;
 	}
 

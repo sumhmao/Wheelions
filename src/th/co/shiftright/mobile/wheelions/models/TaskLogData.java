@@ -20,7 +20,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class TaskLogData implements Parcelable {
+public class TaskLogData implements Parcelable, ILocation {
 
 	private String id;
 	private String name;
@@ -33,6 +33,7 @@ public class TaskLogData implements Parcelable {
 		return staticMap;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -51,6 +52,7 @@ public class TaskLogData implements Parcelable {
 	public void setTime(Date time) {
 		this.time = time;
 	}
+	@Override
 	public LatLng getLocation() {
 		return location;
 	}

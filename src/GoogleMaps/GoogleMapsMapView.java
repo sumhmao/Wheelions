@@ -2,7 +2,7 @@ package GoogleMaps;
 
 import java.util.Collection;
 
-import th.co.shiftright.mobile.wheelions.models.TaskLogData;
+import th.co.shiftright.mobile.wheelions.models.ILocation;
 
 import android.content.Context;
 
@@ -53,7 +53,7 @@ public class GoogleMapsMapView {
 				if (!singleMode) {
 					deSelectedMarker();
 					selectedMarker = item;
-					TaskLogData selectedPlace = item.getLog();
+					ILocation selectedPlace = item.getLog();
 					if (selectedPlace != null) {
 						selectPin(item);
 						if (mMapViewListener != null) {
@@ -128,11 +128,11 @@ public class GoogleMapsMapView {
 		setCurrentLocation(location);
 	}
 
-	public PlacePin addPlace(final TaskLogData place) {
+	public PlacePin addPlace(final ILocation place) {
 		return doAddClusterItem(place, false);
 	}
 
-	public PlacePin addSelectedPlace(final TaskLogData place) {
+	public PlacePin addSelectedPlace(final ILocation place) {
 		return doAddClusterItem(place, true);
 	}
 
@@ -144,7 +144,7 @@ public class GoogleMapsMapView {
 		return marker;
 	}
 
-	private PlacePin doAddClusterItem(TaskLogData place, boolean startWithSelected) {
+	private PlacePin doAddClusterItem(ILocation place, boolean startWithSelected) {
 		PlacePin pin = new PlacePin(place);
 		pin.setStartWithSelected(startWithSelected);
 		clusterManager.addItem(pin);
@@ -187,7 +187,7 @@ public class GoogleMapsMapView {
 		}
 	}
 
-	public void goToPlace(TaskLogData place) {
+	public void goToPlace(ILocation place) {
 		googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLocation(), 15));
 	}
 
@@ -202,7 +202,7 @@ public class GoogleMapsMapView {
 
 	public void deSelectedMarker() {
 		if (selectedMarker != null) {
-			TaskLogData selectedPlace = selectedMarker.getLog();
+			ILocation selectedPlace = selectedMarker.getLog();
 			if (selectedPlace != null) {
 				deselectPin(selectedMarker);
 			}
